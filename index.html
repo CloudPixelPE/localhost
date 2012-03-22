@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>There's nothing like localhost</title>
+  <style>
+    body {
+      margin: 0; 
+      padding: 0;
+      overflow: hidden;
+    }
+    #gravatar {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      margin-left: -30px;
+      
+      transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -webkit-transform: rotate(15deg);
+    }
+    #gravatar img {display: block;}
+    canvas {
+      position: absolute;
+      top: 50%; left: 50%; 
+      margin-left: -30px; margin-top: -30px;
+    }
+    
+  </style>
+  </head>
+  <body>
+    
+    <div id="gravatar">
+      <img src="http://gravatar.com/avatar/43ffb54c19891452cd4ab3a2e95b30fb?s=60" alt="" />
+    </div>
+    
+    <canvas></canvas>
+
+    <script>
+      var img = document.getElementById("gravatar").getElementsByTagName("img")[0],
+          canvas = document.getElementsByTagName('canvas')[0];
+      canvas.width = canvas.height = 60;
+      
+      // if browser support canvas, hide image and add it to the canvas (and make cooler stuff)
+      // if (canvas.getContext) {
+      //   img.style.display = "none";
+      //   var context = canvas.getContext('2d');
+      //   context.drawImage(img, 0, 0, 60, 60);
+      // }
+    </script>
+  </body>
+</html>
