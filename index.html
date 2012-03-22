@@ -20,12 +20,7 @@
       -webkit-transform: rotate(15deg);
     }
     #gravatar img {display: block;}
-/*    canvas {
-      position: absolute;
-      top: 50%; left: 50%; 
-      margin-left: -30px; margin-top: -30px;
-    }*/
-    
+
   </style>
   </head>
   <body>
@@ -34,19 +29,73 @@
       <img src="http://gravatar.com/avatar/43ffb54c19891452cd4ab3a2e95b30fb?s=60" alt="" />
     </div>
     
-    <!-- <canvas></canvas> -->
+    <canvas></canvas>
 
     <script>
-      // var img = document.getElementById("gravatar").getElementsByTagName("img")[0],
-      //     canvas = document.getElementsByTagName('canvas')[0];
-      // canvas.width = canvas.height = 60;
+      var img = document.getElementById("gravatar").getElementsByTagName("img")[0],
+          canvas = document.getElementsByTagName('canvas')[0],
+          interval;
+
       
       // if browser support canvas, hide image and add it to the canvas (and make cooler stuff)
-      // if (canvas.getContext) {
-      //   img.style.display = "none";
-      //   var context = canvas.getContext('2d');
-      //   context.drawImage(img, 0, 0, 60, 60);
-      // }
+      if (canvas.getContext) {
+        // set the canvas width and height to 100%
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // hide original image
+        img.style.display = "none";
+        // get the canvas context
+        var context = canvas.getContext('2d');
+        // init the drawing
+        draw();
+        
+        var resize_to;
+        window.onresize = function() {
+          clearTimeout(interval);
+          clearTimeout(resize_to);
+          resize_to = setTimeout(function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw();
+          }, 125);
+        }
+        
+      }
+
+      function draw() {
+        clearTimeout(interval);
+        context.clearRect (0, 0, window.innerWidth, window.innerHeight);
+        draw_img();
+        generate_noise();
+        interval = setTimeout(draw, get_random_ms());
+      }
+      
+      function draw_img() {
+        context.drawImage(img, 0, 0, window.innerWidth, window.innerHeight);
+      }
+      
+      function generate_noise() {
+        var opacity = get_opacity(),
+            pixel_size = Math.floor(window.innerWidth / 100);
+            
+        for ( x = 0; x < canvas.width / pixel_size; x++ ) {
+          for ( y = 0; y < canvas.height / pixel_size; y++ ) {
+            number = Math.floor( Math.random() * 120 );
+            context.fillStyle = "rgba(" + number + "," + number + "," + number + ","+opacity+")";
+            context.fillRect(x*pixel_size, y*pixel_size, pixel_size, pixel_size);
+          }
+        }
+      }
+      function get_opacity() {
+        return "0."+get_random_int(3, 9);
+      }
+      function get_random_ms() {
+        return get_random_int(25, 250);
+      }
+      function get_random_int(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
     </script>
   </body>
 </html>
